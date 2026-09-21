@@ -66,6 +66,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -248,8 +249,7 @@ fun ForexCalculatorScreen(
 
             MarketPresetsRow(
               presets = uiState.presets,
-              activeOpen = uiState.openPrice,
-              activePip = uiState.pipValue,
+              selectedPresetName = uiState.selectedPresetName,
               theme = theme,
               onSelect = { preset ->
                 haptic.performHapticFeedback(HapticFeedbackType.LongPress)
@@ -534,8 +534,7 @@ private fun ThemeSelectorRow(
 @Composable
 private fun MarketPresetsRow(
   presets: List<MarketPreset>,
-  activeOpen: String,
-  activePip: String,
+  selectedPresetName: String,
   theme: AppTheme,
   onSelect: (MarketPreset) -> Unit
 ) {
@@ -546,29 +545,41 @@ private fun MarketPresetsRow(
     horizontalArrangement = Arrangement.spacedBy(6.dp)
   ) {
     presets.forEach { preset ->
-      val isSelected = preset.defaultPrice == activeOpen && preset.pipValue == activePip
+      val isSelected = preset.name == selectedPresetName
       val bgColor = if (isSelected) {
-        theme.accent.copy(alpha = if (theme.isDark) 0.25f else 0.16f)
+        theme.accent
       } else {
-        if (theme.isDark) Color(0x0DFFFFFF) else Color(0x06000000)
+        if (theme.isDark) Color(0x0EFFFFFF) else Color(0x06000000)
       }
-      val borderColor = if (isSelected) theme.accent else theme.cardBorder
-      val textColor = if (isSelected) theme.accent else theme.textMuted
+      val borderColor = if (isSelected) {
+        if (theme.isDark) Color.White.copy(alpha = 0.7f) else theme.accentDark
+      } else {
+        theme.cardBorder
+      }
+      val textColor = if (isSelected) {
+        if (theme.isDark) Color(0xFF030D18) else Color.White
+      } else {
+        theme.textMuted
+      }
 
       Box(
         modifier = Modifier
           .clip(RoundedCornerShape(8.dp))
-          .border(1.dp, borderColor, RoundedCornerShape(8.dp))
+          .border(
+            width = if (isSelected) 1.5.dp else 1.dp,
+            color = borderColor,
+            shape = RoundedCornerShape(8.dp)
+          )
           .background(bgColor)
           .clickable { onSelect(preset) }
-          .padding(horizontal = 10.dp, vertical = 7.dp),
+          .padding(horizontal = 11.dp, vertical = 7.dp),
         contentAlignment = Alignment.Center
       ) {
         Text(
           text = preset.name,
           color = textColor,
-          fontSize = 9.5.sp,
-          fontWeight = if (isSelected) FontWeight.ExtraBold else FontWeight.Medium
+          fontSize = 10.sp,
+          fontWeight = if (isSelected) FontWeight.Black else FontWeight.SemiBold
         )
       }
     }
@@ -921,34 +932,34 @@ private fun ResultsTable(
     Row(
       modifier = Modifier
         .fillMaxWidth()
-        .background(if (theme.isDark) Color(0x09FFFFFF) else Color(0x08000000))
-        .padding(horizontal = 8.dp, vertical = 10.dp),
+        .background(if (theme.isDark) Color(0x0EFFFFFF) else Color(0x08000000))
+        .padding(horizontal = 10.dp, vertical = 10.dp),
       verticalAlignment = Alignment.CenterVertically
     ) {
       Text(
         text = "RATIO",
-        color = theme.textMuted,
-        fontSize = 8.sp,
+        color = if (theme.isDark) Color(0xFFFBBF24) else Color(0xFFD97706),
+        fontSize = 8.5.sp,
         fontWeight = FontWeight.Black,
         letterSpacing = 0.8.sp,
         modifier = Modifier.weight(0.9f)
       )
       Text(
         text = "SL",
-        color = theme.textMuted,
-        fontSize = 8.sp,
+        color = if (theme.isDark) Color(0xFFFF6B6B) else Color(0xFFDC2626),
+        fontSize = 10.sp,
         fontWeight = FontWeight.Black,
-        letterSpacing = 0.8.sp,
+        letterSpacing = 1.sp,
         textAlign = TextAlign.Center,
         modifier = Modifier.weight(1f)
       )
       Spacer(modifier = Modifier.width(55.dp))
       Text(
         text = "TP",
-        color = theme.textMuted,
-        fontSize = 8.sp,
+        color = if (theme.isDark) Color(0xFF4ADE80) else Color(0xFF16A34A),
+        fontSize = 10.sp,
         fontWeight = FontWeight.Black,
-        letterSpacing = 0.8.sp,
+        letterSpacing = 1.sp,
         textAlign = TextAlign.Center,
         modifier = Modifier.weight(1f)
       )
@@ -995,10 +1006,14 @@ private fun ResultRow(
   val isSlCopied = copiedKey == slKey
   val isTpCopied = copiedKey == tpKey
 
+  val ratioColor = if (theme.isDark) Color(0xFFFBBF24) else Color(0xFFD97706)
+  val slColor = if (theme.isDark) Color(0xFFFF6B6B) else Color(0xFFDC2626)
+  val tpColor = if (theme.isDark) Color(0xFF4ADE80) else Color(0xFF16A34A)
+
   Row(
     modifier = Modifier
       .fillMaxWidth()
-      .heightIn(min = 57.dp)
+      .heightIn(min = 60.dp)
       .border(width = 0.5.dp, color = theme.cardBorder)
       .background(
         brush = Brush.horizontalGradient(
@@ -1008,24 +1023,25 @@ private fun ResultRow(
           )
         )
       )
-      .padding(horizontal = 8.dp, vertical = 6.dp),
+      .padding(horizontal = 10.dp, vertical = 8.dp),
     verticalAlignment = Alignment.CenterVertically
   ) {
-    // Ratio name
+    // Ratio name (Ukuran font presisi seperti semula: 12sp)
     Text(
       text = result.ratio,
-      color = theme.textPrimary,
+      color = ratioColor,
       fontSize = 12.sp,
-      fontWeight = FontWeight.Black,
+      fontWeight = FontWeight.Bold,
       modifier = Modifier.weight(0.9f)
     )
 
-    // SL Price
+    // SL Price (Lebih besar & warna merah coral khas Stop Loss)
     Text(
       text = result.slText,
-      color = theme.textPrimary,
-      fontSize = 13.sp,
+      color = slColor,
+      fontSize = 17.5.sp,
       fontWeight = FontWeight.Black,
+      fontFamily = FontFamily.Monospace,
       textAlign = TextAlign.Center,
       modifier = Modifier.weight(1f)
     )
@@ -1038,12 +1054,13 @@ private fun ResultRow(
       modifier = Modifier.testTag("copy_sl_${result.ratio.replace(':', '_')}")
     )
 
-    // TP Price
+    // TP Price (Lebih besar & warna hijau emerald khas Take Profit)
     Text(
       text = result.tpText,
-      color = theme.textPrimary,
-      fontSize = 13.sp,
+      color = tpColor,
+      fontSize = 17.5.sp,
       fontWeight = FontWeight.Black,
+      fontFamily = FontFamily.Monospace,
       textAlign = TextAlign.Center,
       modifier = Modifier.weight(1f)
     )

@@ -24,6 +24,7 @@ class ForexPreferences(context: Context) {
     private const val KEY_ORDER_TYPE = "pref_order_type"
     private const val KEY_SELECTED_RATIOS = "pref_selected_ratios"
     private const val KEY_AVAILABLE_RATIOS = "pref_available_ratios"
+    private const val KEY_SELECTED_PRESET = "pref_selected_preset"
 
     // Lot Size
     private const val KEY_LOT_BALANCE = "pref_lot_balance"
@@ -76,7 +77,8 @@ class ForexPreferences(context: Context) {
     pipValue: String,
     orderType: OrderType,
     selectedRatios: Set<String>,
-    availableRatios: List<String>
+    availableRatios: List<String>,
+    selectedPreset: String = "GOLD (XAU)"
   ) {
     prefs.edit()
       .putString(KEY_OPEN_PRICE, openPrice)
@@ -84,9 +86,11 @@ class ForexPreferences(context: Context) {
       .putString(KEY_ORDER_TYPE, orderType.name)
       .putStringSet(KEY_SELECTED_RATIOS, selectedRatios)
       .putString(KEY_AVAILABLE_RATIOS, availableRatios.joinToString(","))
+      .putString(KEY_SELECTED_PRESET, selectedPreset)
       .apply()
   }
 
+  fun getSelectedPreset(): String = prefs.getString(KEY_SELECTED_PRESET, "GOLD (XAU)") ?: "GOLD (XAU)"
   fun getOpenPrice(): String = prefs.getString(KEY_OPEN_PRICE, "4000") ?: "4000"
   fun getPipValue(): String = prefs.getString(KEY_PIP_VALUE, "0.1") ?: "0.1"
   fun getOrderType(): OrderType {

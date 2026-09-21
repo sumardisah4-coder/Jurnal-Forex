@@ -58,6 +58,7 @@ data class ForexUiState(
     MarketPreset("NASDAQ", "20000", "1.0"),
     MarketPreset("BTC/USD", "65000", "1.0")
   ),
+  val selectedPresetName: String = "GOLD (XAU)",
 
   // --- Lot Size Calculator State ---
   val selectedInstrument: InstrumentOption = InstrumentOption.ALL.first(),
@@ -156,6 +157,7 @@ class ForexCalculatorViewModel(private val applicationContext: Context? = null) 
     val prefs = preferences ?: return
     val savedTab = prefs.getActiveTab()
     val savedTheme = prefs.getTheme()
+    val savedPreset = prefs.getSelectedPreset()
     val open = prefs.getOpenPrice()
     val pip = prefs.getPipValue()
     val order = prefs.getOrderType()
@@ -184,6 +186,7 @@ class ForexCalculatorViewModel(private val applicationContext: Context? = null) 
       it.copy(
         activeTab = savedTab,
         currentTheme = savedTheme,
+        selectedPresetName = savedPreset,
         openPrice = open,
         pipValue = pip,
         orderType = order,
@@ -221,7 +224,8 @@ class ForexCalculatorViewModel(private val applicationContext: Context? = null) 
       s.pipValue,
       s.orderType,
       s.selectedRatios,
-      s.availableRatios
+      s.availableRatios,
+      s.selectedPresetName
     )
     prefs.saveLotSizeState(
       s.lotBalance,
@@ -288,6 +292,7 @@ class ForexCalculatorViewModel(private val applicationContext: Context? = null) 
   fun applyPreset(preset: MarketPreset) {
     _uiState.update {
       it.copy(
+        selectedPresetName = preset.name,
         openPrice = preset.defaultPrice,
         pipValue = preset.pipValue
       )

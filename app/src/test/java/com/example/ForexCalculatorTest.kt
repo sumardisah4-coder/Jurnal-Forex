@@ -243,4 +243,20 @@ class ForexCalculatorTest {
     viewModel.closeDayDetail()
     org.junit.Assert.assertFalse(viewModel.uiState.value.isDayDetailModalOpen)
   }
+
+  @Test
+  fun testPairSelectionPersistence() {
+    val viewModel = ForexCalculatorViewModel()
+    assertEquals("GOLD (XAU)", viewModel.uiState.value.selectedPresetName)
+
+    val eurUsd = viewModel.uiState.value.presets.first { it.name == "EUR/USD" }
+    viewModel.applyPreset(eurUsd)
+    assertEquals("EUR/USD", viewModel.uiState.value.selectedPresetName)
+    assertEquals("1.0850", viewModel.uiState.value.openPrice)
+
+    // User types custom price; pair remains selected and bright
+    viewModel.onOpenPriceChanged("1.0920")
+    assertEquals("EUR/USD", viewModel.uiState.value.selectedPresetName)
+    assertEquals("1.0920", viewModel.uiState.value.openPrice)
+  }
 }
