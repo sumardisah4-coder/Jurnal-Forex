@@ -767,18 +767,21 @@ private fun CalendarCell(
 
             Spacer(modifier = Modifier.height(3.dp))
 
-            // Session badge pill
+            // Session badge pill (Lebar kotak ASIA & NYC sama dengan LONDON)
             Box(
               modifier = Modifier
+                .width(52.dp)
                 .clip(RoundedCornerShape(4.dp))
                 .background(sessionBg)
-                .padding(horizontal = 5.dp, vertical = 1.dp)
+                .padding(vertical = 1.5.dp),
+              contentAlignment = Alignment.Center
             ) {
               Text(
                 text = sessionName,
                 color = sessionTextColor,
                 fontSize = 8.sp,
                 fontWeight = FontWeight.Black,
+                textAlign = TextAlign.Center,
                 maxLines = 1
               )
             }
@@ -943,18 +946,21 @@ private fun DayDetailDialog(
                       }
 
                       Row(verticalAlignment = Alignment.CenterVertically) {
-                        // Session badge
+                        // Session badge (Lebar seragam untuk ASIA, LONDON, NYC)
                         Box(
                           modifier = Modifier
+                            .width(58.dp)
                             .clip(RoundedCornerShape(4.dp))
                             .background(sessionBg)
-                            .padding(horizontal = 6.dp, vertical = 2.dp)
+                            .padding(vertical = 2.dp),
+                          contentAlignment = Alignment.Center
                         ) {
                           Text(
                             text = trade.session.uppercase(Locale.US),
                             color = Color(0xFF1B0F18),
                             fontSize = 9.sp,
-                            fontWeight = FontWeight.Black
+                            fontWeight = FontWeight.Black,
+                            textAlign = TextAlign.Center
                           )
                         }
 
@@ -1287,6 +1293,7 @@ private fun TradeFormDialog(
               OutlinedTextField(
                 value = uiState.tradeFormPair,
                 onValueChange = viewModel::onTradeFormPairChanged,
+                placeholder = { Text("XAUUSD", color = Color(0xFF55535D)) },
                 textStyle = TextStyle(
                   color = Color.White,
                   fontSize = 14.sp,

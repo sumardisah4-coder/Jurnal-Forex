@@ -195,7 +195,7 @@ class ForexPreferences(context: Context) {
             pnl = obj.optDouble("pnl", 0.0),
             pips = pips,
             rr = obj.optString("rr", ""),
-            pair = obj.optString("pair", "EUR/USD"),
+            pair = obj.optString("pair", "XAUUSD"),
             session = obj.optString("session", "ASIA"),
             notes = obj.optString("notes", ""),
             imageUri = img

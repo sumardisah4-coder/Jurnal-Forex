@@ -91,6 +91,24 @@ class ForexCalculatorTest {
 
     viewModel.setTheme(com.example.model.AppTheme.EMERALD_MINT)
     assertEquals(com.example.model.AppTheme.EMERALD_MINT, viewModel.uiState.value.currentTheme)
+
+    viewModel.setTheme(com.example.model.AppTheme.MIDNIGHT_NAVY)
+    assertEquals(com.example.model.AppTheme.MIDNIGHT_NAVY, viewModel.uiState.value.currentTheme)
+
+    viewModel.setTheme(com.example.model.AppTheme.TITANIUM_ONYX)
+    assertEquals(com.example.model.AppTheme.TITANIUM_ONYX, viewModel.uiState.value.currentTheme)
+
+    viewModel.setTheme(com.example.model.AppTheme.ROYAL_AMETHYST)
+    assertEquals(com.example.model.AppTheme.ROYAL_AMETHYST, viewModel.uiState.value.currentTheme)
+
+    viewModel.setTheme(com.example.model.AppTheme.NORDIC_SLATE)
+    assertEquals(com.example.model.AppTheme.NORDIC_SLATE, viewModel.uiState.value.currentTheme)
+
+    viewModel.setTheme(com.example.model.AppTheme.CHAMPAGNE_LUXE)
+    assertEquals(com.example.model.AppTheme.CHAMPAGNE_LUXE, viewModel.uiState.value.currentTheme)
+
+    // Check default pair is XAUUSD
+    assertEquals("XAUUSD", viewModel.uiState.value.tradeFormPair)
   }
 
   @Test

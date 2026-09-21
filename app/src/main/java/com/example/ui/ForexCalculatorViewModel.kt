@@ -99,7 +99,7 @@ data class ForexUiState(
   val tradeFormPnl: String = "",
   val tradeFormPips: String = "",
   val tradeFormRr: String = "",
-  val tradeFormPair: String = "EUR/USD",
+  val tradeFormPair: String = "XAUUSD",
   val tradeFormSession: String = "ASIA",
   val tradeFormNotes: String = "",
   val tradeFormImageUri: String? = null,
@@ -569,7 +569,7 @@ class ForexCalculatorViewModel(private val applicationContext: Context? = null) 
         tradeFormPnl = existing?.let { t -> String.format(Locale.US, "%.2f", t.pnl) } ?: "",
         tradeFormPips = existing?.pips?.let { p -> String.format(Locale.US, "%.1f", p) } ?: "",
         tradeFormRr = existing?.rr ?: "",
-        tradeFormPair = existing?.pair ?: "EUR/USD",
+        tradeFormPair = existing?.pair ?: "XAUUSD",
         tradeFormSession = existing?.session ?: "ASIA",
         tradeFormNotes = existing?.notes ?: "",
         tradeFormImageUri = existing?.imageUri
