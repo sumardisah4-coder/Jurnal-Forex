@@ -1,0 +1,90 @@
+package com.example.model
+
+import androidx.compose.ui.graphics.Color
+
+enum class AppTheme(
+  val id: String,
+  val label: String,
+  val iconEmoji: String,
+  val isDark: Boolean,
+  val bgDark: Color,
+  val cardBgTop: Color,
+  val cardBgBottom: Color,
+  val cardBorder: Color,
+  val textPrimary: Color,
+  val textMuted: Color,
+  val accent: Color,
+  val accentDark: Color,
+  val buyColor: Color,
+  val sellColor: Color,
+  val goldColor: Color
+) {
+  CYBER_DARK(
+    id = "cyber_dark",
+    label = "Cyber Dark",
+    iconEmoji = "🌙",
+    isDark = true,
+    bgDark = Color(0xFF040711),
+    cardBgTop = Color(0xF80F1A2D),
+    cardBgBottom = Color(0xFA060C17),
+    cardBorder = Color(0x22FFFFFF),
+    textPrimary = Color(0xFFF5F7FB),
+    textMuted = Color(0xFF7F8DA5),
+    accent = Color(0xFF3B82F6),
+    accentDark = Color(0xFF1D4ED8),
+    buyColor = Color(0xFF10B981),
+    sellColor = Color(0xFFEF4444),
+    goldColor = Color(0xFFF5C451)
+  ),
+  LIGHT_PRO(
+    id = "light_pro",
+    label = "Light Modern",
+    iconEmoji = "☀️",
+    isDark = false,
+    bgDark = Color(0xFFF0F4F9),
+    cardBgTop = Color(0xFFFFFFFF),
+    cardBgBottom = Color(0xFFF8FAFC),
+    cardBorder = Color(0x1F000000),
+    textPrimary = Color(0xFF0F172A),
+    textMuted = Color(0xFF64748B),
+    accent = Color(0xFF2563EB),
+    accentDark = Color(0xFF1D4ED8),
+    buyColor = Color(0xFF059669),
+    sellColor = Color(0xFFDC2626),
+    goldColor = Color(0xFFD97706)
+  ),
+  GOLD_TRADER(
+    id = "gold_trader",
+    label = "Gold Bullion",
+    iconEmoji = "✨",
+    isDark = true,
+    bgDark = Color(0xFF0D0C07),
+    cardBgTop = Color(0xFF1C1910),
+    cardBgBottom = Color(0xFF14120B),
+    cardBorder = Color(0x3DF5C451),
+    textPrimary = Color(0xFFFFFBEB),
+    textMuted = Color(0xFFA8A29E),
+    accent = Color(0xFFF59E0B),
+    accentDark = Color(0xFFD97706),
+    buyColor = Color(0xFF10B981),
+    sellColor = Color(0xFFEF4444),
+    goldColor = Color(0xFFF5C451)
+  ),
+  EMERALD_MINT(
+    id = "emerald_mint",
+    label = "Emerald Mint",
+    iconEmoji = "🍀",
+    isDark = false,
+    bgDark = Color(0xFFF0FDF4),
+    cardBgTop = Color(0xFFFFFFFF),
+    cardBgBottom = Color(0xFFF0FDF4),
+    cardBorder = Color(0x2E059669),
+    textPrimary = Color(0xFF064E3B),
+    textMuted = Color(0xFF059669),
+    accent = Color(0xFF059669),
+    accentDark = Color(0xFF047857),
+    buyColor = Color(0xFF059669),
+    sellColor = Color(0xFFE11D48),
+    goldColor = Color(0xFFD97706)
+  )
+}

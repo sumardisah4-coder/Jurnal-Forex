@@ -1,0 +1,8 @@
+{
+  "name": "Jurnal Forex",
+  "description": "All-in-one Forex suite: Trade Journal, Smart SL/TP Calculator, Lot Size Risk Calculator, and Compounding Ledger",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
