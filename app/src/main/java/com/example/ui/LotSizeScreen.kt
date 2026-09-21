@@ -643,11 +643,16 @@ fun LotSizeScreen(
           ) {
             result.referencePills.forEach { pill ->
               val isHighlight = pill.isCloseToCalculated
+              val pipColor = if (theme.isDark) Color(0xFFFBBF24) else Color(0xFFB45309) // Sharp Amber/Gold for pip
+              val riskColor = if (theme.isDark) Color(0xFFFF7A7A) else Color(0xFFDC2626) // Sharp Coral Red for risk
+              val arrowColor = if (theme.isDark) Color(0xFF94A3B8) else Color(0xFF64748B)
+
               Box(
                 modifier = Modifier
+                  .fillMaxWidth()
                   .clip(RoundedCornerShape(10.dp))
                   .background(
-                    if (isHighlight) theme.accent.copy(alpha = 0.2f)
+                    if (isHighlight) theme.accent.copy(alpha = if (theme.isDark) 0.25f else 0.16f)
                     else if (theme.isDark) Color(0x14FFFFFF)
                     else Color(0x08000000)
                   )
@@ -664,21 +669,48 @@ fun LotSizeScreen(
                       String.format(Locale.US, "%.2f", pill.lot)
                     )
                   }
-                  .padding(horizontal = 10.dp, vertical = 6.dp)
+                  .padding(horizontal = 12.dp, vertical = 9.dp)
               ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
+                Row(
+                  modifier = Modifier.fillMaxWidth(),
+                  verticalAlignment = Alignment.CenterVertically
+                ) {
+                  // Lot size (Tebal & tajam)
                   Text(
                     text = "${String.format(Locale.US, "%.2f", pill.lot)} lot",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Black,
+                    fontSize = 13.sp,
                     color = if (isHighlight) theme.accent else theme.textPrimary,
                     fontFamily = FontFamily.Monospace
                   )
-                  Spacer(modifier = Modifier.width(6.dp))
+                  Spacer(modifier = Modifier.width(8.dp))
                   Text(
-                    text = "→ $${String.format(Locale.US, "%.2f", pill.pipValue)}/pip · ${String.format(Locale.US, "%.1f", pill.riskPercent)}% risk",
-                    fontSize = 11.sp,
-                    color = theme.textMuted,
+                    text = "→",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 12.sp,
+                    color = arrowColor
+                  )
+                  Spacer(modifier = Modifier.width(8.dp))
+                  // Pip Value (Warna Amber tajam)
+                  Text(
+                    text = "$${String.format(Locale.US, "%.2f", pill.pipValue)}/pip",
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = pipColor,
+                    fontFamily = FontFamily.Monospace
+                  )
+                  Text(
+                    text = " · ",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 12.sp,
+                    color = arrowColor
+                  )
+                  // Risk Percent (Warna Merah/Coral tajam)
+                  Text(
+                    text = "${String.format(Locale.US, "%.1f", pill.riskPercent)}% risk",
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = riskColor,
                     fontFamily = FontFamily.Monospace
                   )
                 }

@@ -259,29 +259,15 @@ fun ForexCalculatorScreen(
 
             Spacer(modifier = Modifier.height(10.dp))
 
-            Row(
-              modifier = Modifier.fillMaxWidth(),
-              horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-              MarketInputField(
-                label = "PRICE / OPEN",
-                value = uiState.openPrice,
-                onValueChange = viewModel::onOpenPriceChanged,
-                theme = theme,
-                modifier = Modifier
-                  .weight(1f)
-                  .testTag("open_price_input")
-              )
-              MarketInputField(
-                label = "PIP / POINT VALUE",
-                value = uiState.pipValue,
-                onValueChange = viewModel::onPipValueChanged,
-                theme = theme,
-                modifier = Modifier
-                  .weight(1f)
-                  .testTag("pip_value_input")
-              )
-            }
+            MarketInputField(
+              label = "PIP / POINT VALUE",
+              value = uiState.pipValue,
+              onValueChange = viewModel::onPipValueChanged,
+              theme = theme,
+              modifier = Modifier
+                .fillMaxWidth()
+                .testTag("pip_value_input")
+            )
 
             Spacer(modifier = Modifier.height(18.dp))
 
@@ -330,7 +316,35 @@ fun ForexCalculatorScreen(
               )
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(14.dp))
+
+            // ==========================================
+            // PRICE / OPEN (DIPINDAHKAN DI BAWAH HITUNG SL & TP DENGAN COPY)
+            // ==========================================
+            MarketInputField(
+              label = "PRICE / OPEN",
+              value = uiState.openPrice,
+              onValueChange = viewModel::onOpenPriceChanged,
+              theme = theme,
+              modifier = Modifier
+                .fillMaxWidth()
+                .testTag("open_price_input"),
+              trailingContent = {
+                CopyButton(
+                  isCopied = uiState.copiedKey == "price_open",
+                  theme = theme,
+                  onClick = {
+                    if (uiState.openPrice.isNotBlank()) {
+                      haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                      viewModel.copyToClipboard(context, "price_open", uiState.openPrice)
+                    }
+                  },
+                  modifier = Modifier.testTag("copy_price_open")
+                )
+              }
+            )
+
+            Spacer(modifier = Modifier.height(14.dp))
 
             // ==========================================
             // BAGIAN 5: RESULTS TABLE
@@ -615,7 +629,8 @@ private fun MarketInputField(
   value: String,
   onValueChange: (String) -> Unit,
   theme: AppTheme,
-  modifier: Modifier = Modifier
+  modifier: Modifier = Modifier,
+  trailingContent: (@Composable () -> Unit)? = null
 ) {
   var isFocused by remember { mutableStateOf(false) }
 
@@ -625,7 +640,7 @@ private fun MarketInputField(
     label = "field_border"
   )
 
-  Column(
+  Row(
     modifier = modifier
       .clip(RoundedCornerShape(14.dp))
       .border(1.dp, borderColor, RoundedCornerShape(14.dp))
@@ -638,40 +653,48 @@ private fun MarketInputField(
           }
         )
       )
-      .padding(11.dp)
+      .padding(horizontal = 13.dp, vertical = 10.dp),
+    verticalAlignment = Alignment.CenterVertically
   ) {
-    Text(
-      text = label,
-      color = theme.textMuted,
-      fontSize = 8.sp,
-      fontWeight = FontWeight.ExtraBold,
-      letterSpacing = 0.7.sp,
-      modifier = Modifier.padding(bottom = 4.dp)
-    )
+    Column(modifier = Modifier.weight(1f)) {
+      Text(
+        text = label,
+        color = theme.textMuted,
+        fontSize = 8.sp,
+        fontWeight = FontWeight.ExtraBold,
+        letterSpacing = 0.7.sp,
+        modifier = Modifier.padding(bottom = 3.dp)
+      )
 
-    BasicTextField(
-      value = value,
-      onValueChange = { input ->
-        if (input.isEmpty() || input.matches(Regex("^[0-9]*\\.?[0-9]*$"))) {
-          onValueChange(input)
-        }
-      },
-      textStyle = TextStyle(
-        color = theme.textPrimary,
-        fontSize = 18.sp,
-        fontWeight = FontWeight.Black
-      ),
-      cursorBrush = SolidColor(theme.accent),
-      keyboardOptions = KeyboardOptions(
-        keyboardType = KeyboardType.Decimal,
-        imeAction = ImeAction.Done
-      ),
-      singleLine = true,
-      modifier = Modifier
-        .fillMaxWidth()
-        .height(25.dp)
-        .onFocusChanged { isFocused = it.isFocused }
-    )
+      BasicTextField(
+        value = value,
+        onValueChange = { input ->
+          if (input.isEmpty() || input.matches(Regex("^[0-9]*\\.?[0-9]*$"))) {
+            onValueChange(input)
+          }
+        },
+        textStyle = TextStyle(
+          color = theme.textPrimary,
+          fontSize = 18.sp,
+          fontWeight = FontWeight.Black
+        ),
+        cursorBrush = SolidColor(theme.accent),
+        keyboardOptions = KeyboardOptions(
+          keyboardType = KeyboardType.Decimal,
+          imeAction = ImeAction.Done
+        ),
+        singleLine = true,
+        modifier = Modifier
+          .fillMaxWidth()
+          .height(25.dp)
+          .onFocusChanged { isFocused = it.isFocused }
+      )
+    }
+
+    if (trailingContent != null) {
+      Spacer(modifier = Modifier.width(8.dp))
+      trailingContent()
+    }
   }
 }
 

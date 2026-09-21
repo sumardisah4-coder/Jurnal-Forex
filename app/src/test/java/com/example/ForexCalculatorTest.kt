@@ -259,4 +259,16 @@ class ForexCalculatorTest {
     assertEquals("EUR/USD", viewModel.uiState.value.selectedPresetName)
     assertEquals("1.0920", viewModel.uiState.value.openPrice)
   }
+
+  @Test
+  fun testPriceOpenValueRemainsValidForCalculation() {
+    val viewModel = ForexCalculatorViewModel()
+    viewModel.onOpenPriceChanged("4300")
+    assertEquals("4300", viewModel.uiState.value.openPrice)
+
+    // With BUY and default 100:200, SL should be 4300 - 100*0.1 = 4290, TP = 4300 + 200*0.1 = 4320
+    val res1 = viewModel.uiState.value.results.first { it.ratio == "100:200" }
+    assertEquals("4290", res1.slText)
+    assertEquals("4320", res1.tpText)
+  }
 }
